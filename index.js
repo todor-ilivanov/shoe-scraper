@@ -17,10 +17,12 @@ processResponse = (response) => {
   if(typeof response.data !== 'undefined') {
     const $ = cheerio.load(response.data);
     const price = $('.css-i260wg');
-    // TODO if not sold out
+    const soldOut = $('.sold-out');
     if(typeof price !== 'undefined') {
       if('data-test' in price.attr() && 
-        price.attr()['data-test'] === 'product-price-reduced') {
+        price.attr()['data-test'] === 'product-price-reduced' && 
+        typeof soldOut === 'undefined') {
+          
         const priceValue = price.first().text();
         console.log(priceValue);
         email.sendEmail(priceValue);
